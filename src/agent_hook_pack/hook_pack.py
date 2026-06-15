@@ -4,6 +4,13 @@ from pathlib import Path
 import re
 
 HOOK_EXTENSIONS = (".py", ".sh")
+EXPECTED_HOOKS = {
+    "block-secrets.py",
+    "check-branch.sh",
+    "check-env-sync.sh",
+    "lint-on-save.sh",
+    "verify-no-secrets.sh",
+}
 SENSITIVE_PATTERNS = (
     r"ghp_[A-Za-z0-9_]{20,}",
     r"sk-[A-Za-z0-9_-]{20,}",
@@ -31,9 +38,26 @@ def audit_hooks(source_dir: Path | str = HOOK_DIR) -> list[tuple[str, str]]:
         return [(str(root), "hook_dir_missing")]
 
     findings: list[tuple[str, str]] = []
+    hooks = discover_hooks(root)
+    hook_names = {hook.name for hook in hooks}
+    for expected in sorted(EXPECTED_HOOKS - hook_names):
+        findings.append((str(root / expected), "required_hook_missing"))
+
     compiled = [re.compile(item) for item in SENSITIVE_PATTERNS]
-    for hook in discover_hooks(root):
+    for hook in hooks:
         text = hook.read_text(encoding="utf-8", errors="ignore")
+        first_line = text.splitlines()[0] if text.splitlines() else ""
+        if not text.strip():
+            findings.append((str(hook), "hook_empty"))
+            continue
+        if not first_line.startswith("#!"):
+            findings.append((str(hook), "shebang_missing"))
+        elif hook.suffix == ".py" and "python" not in first_line.lower():
+            findings.append((str(hook), "shebang_unexpected"))
+        elif hook.suffix == ".sh" and not any(
+            shell in first_line.lower() for shell in ("bash", "sh")
+        ):
+            findings.append((str(hook), "shebang_unexpected"))
         for index, pattern in enumerate(compiled):
             if pattern.search(text):
                 findings.append((str(hook), f"secret_pattern_{index}"))
