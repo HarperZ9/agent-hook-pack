@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Hardens hook audits with required-hook, empty-file, shebang, and
+  credential-pattern checks.
+- Removes broad staged-secret scan skips for test, honeypot, and canary files.
+- Cleans hook comments and output to plain ASCII text.
+
 ## 0.1.0 - 2026-06-13
 
 - Initial public release candidate.

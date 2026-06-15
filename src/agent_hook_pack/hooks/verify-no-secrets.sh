@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# Verify No Secrets Hook â€” Stop
+# Verify No Secrets Hook - Stop
 # Checks staged git files for accidentally committed secrets.
-# Runs when Claude finishes a turn â€” catches secrets before they're committed.
+# Runs when Claude finishes a turn and catches secrets before commit.
 #
 # Based on Claude Code Mastery Guides V1-V5 by TheDecipherist
 
@@ -18,7 +18,7 @@ fi
 
 VIOLATIONS=""
 
-# Check for sensitive files being staged (match basename only â€” anchored)
+# Check for sensitive files being staged (match basename only - anchored)
 SENSITIVE_BASENAMES=".env .env.local .env.production .env.staging secrets.json credentials.json service-account.json .npmrc"
 for pattern in $SENSITIVE_BASENAMES; do
     while IFS= read -r file; do
@@ -41,11 +41,9 @@ done <<< "$STAGED"
 
 # Check staged file contents for common secret patterns
 while IFS= read -r file; do
-    # Skip test fixture files -- synthetic credential-shaped strings as test inputs
-    case "$file" in */tests/test_*.py|*/test_*.py|*_test.py) continue ;; esac
-    # Skip honeypot / canary modules -- intentionally contain credential-shaped lures
-    case "$file" in *honeypot*.py|*canary*.py|*_honeypot.py|*_canary.py) continue ;; esac
     if [ -f "$file" ]; then
+        # Synthetic fixtures should assemble credential-shaped examples at
+        # runtime instead of committing full token shapes.
         # Generic API key / secret / password / token patterns
         if grep -qEi '(api[_-]?key|secret[_-]?key|password|token)\s*[:=]\s*["\x27][A-Za-z0-9+/=_-]{16,}' "$file" 2>/dev/null; then
             VIOLATIONS="${VIOLATIONS}\n  - POSSIBLE SECRET in $file"
@@ -74,7 +72,7 @@ while IFS= read -r file; do
 done <<< "$STAGED"
 
 if [ -n "$VIOLATIONS" ]; then
-    echo -e "âš ï¸  POTENTIAL SECRETS DETECTED:${VIOLATIONS}" >&2
+    echo -e "POTENTIAL SECRETS DETECTED:${VIOLATIONS}" >&2
     echo "" >&2
     echo "Review staged files before committing." >&2
     # Exit 2 = block and inform Claude

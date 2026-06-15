@@ -15,6 +15,9 @@ Included hooks:
 Use it when you want lightweight secret checks, branch guardrails, env-template
 sync checks, and consistent hook deployment.
 
+`agent-hook-pack audit` checks the packaged hook inventory, empty files,
+shebang/runtime shape, and obvious credential-shaped strings.
+
 Built with agentic tooling and manually reviewed before publish.
 
 ## Install
@@ -35,3 +38,5 @@ agent-hook-pack path
 ## Note
 
 The hooks are generic, intentionally scoped, and omit private policy layers.
+Synthetic tests should assemble credential-shaped examples at runtime instead
+of committing complete fake tokens.
