@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "agent-hook-pack"
 version = "0.1.0"
-description = "Public-safe local hook pack for secret checks, branch guardrails, and repo workflow hygiene."
+description = "Public-safe local git/agent hooks: secret checks, branch guards, and pre-commit hygiene."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
