@@ -1,5 +1,40 @@
 # Agent Hook Pack
 
+![Agent Hook Pack hero](docs/brand/agent-hook-pack-hero.png)
+
+> Install public-safe hooks that catch risky repo changes before commit.
+
+Agent Hook Pack packages small git and agent hooks for secret checks, branch
+guards, environment-template sync, and hook inventory audits. It is intentionally
+generic so public repos can use it without importing private policy layers.
+
+## Why it matters
+
+AI-assisted work can produce lots of small file edits quickly. Hooks give the
+repo a cheap local checkpoint before sensitive files, wrong branches, or stale
+environment templates become a release problem.
+
+## Try it
+
+```bash
+python -m pip install -e .
+agent-hook-pack audit
+agent-hook-pack list
+```
+
+## What to test first
+
+- `agent-hook-pack audit` verifies the packaged hook inventory.
+- `agent-hook-pack install --target .claude/hooks` installs hooks into a target directory.
+- `python -m pytest` runs the local regression suite.
+
+## Current status
+
+Public-safe Python package and CLI. The hooks are generic and reviewed for
+release hygiene; private policy layers are intentionally omitted.
+
+## Existing technical notes
+
 > Public-safe local git/agent hooks: secret checks, branch guards, and pre-commit hygiene.
 
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
