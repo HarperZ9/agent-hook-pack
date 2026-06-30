@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# Best-effort demo — not runtime-verified by author.
+# Best-effort demo -- not runtime-verified by author.
 """End-to-end demo of the agent_hook_pack public API.
 
 Run from a clone (with the package installed via `pip install -e .`, or with

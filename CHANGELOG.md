@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adds `AGENTS.md` for repeatable public/developer handoffs.
+- Updates GitHub Actions workflows to current checkout/setup-python majors.
 - Hardens hook audits with required-hook, empty-file, shebang, and
   credential-pattern checks.
 - Removes broad staged-secret scan skips for test, honeypot, and canary files.
