@@ -34,11 +34,11 @@ Commands:
 
 Options:
 
-- `--source SOURCE` — directory to read hooks from. Defaults to the packaged
+- `--source SOURCE` -- directory to read hooks from. Defaults to the packaged
   `hooks/` directory inside the installed package.
-- `--target TARGET` — directory to install hooks into. Defaults to
+- `--target TARGET` -- directory to install hooks into. Defaults to
   `.claude/hooks`. Only used by `install`.
-- `--version` — print the package version and exit.
+- `--version` -- print the package version and exit.
 
 `audit` exits `0` when no problems are found and `1` when it reports findings.
 The other commands exit `0` on success.
@@ -146,9 +146,9 @@ print(count)
 
 Useful module attributes:
 
-- `hook_pack.HOOK_DIR` — `Path` to the packaged hook directory.
-- `hook_pack.EXPECTED_HOOKS` — the set of required hook file names.
-- `hook_pack.HOOK_EXTENSIONS` — recognized hook extensions (`.py`, `.sh`).
-- `hook_pack.SENSITIVE_PATTERNS` — credential-shaped regexes used by the audit.
+- `hook_pack.HOOK_DIR` -- `Path` to the packaged hook directory.
+- `hook_pack.EXPECTED_HOOKS` -- the set of required hook file names.
+- `hook_pack.HOOK_EXTENSIONS` -- recognized hook extensions (`.py`, `.sh`).
+- `hook_pack.SENSITIVE_PATTERNS` -- credential-shaped regexes used by the audit.
 
 The package version is exposed as `agent_hook_pack.__version__`.
