@@ -1,8 +1,6 @@
-<p align="center"><img src=".github/assets/zentropy-banner.png" alt="agent-hook-pack" width="100%"></p>
+<p align="center"><img src="docs/art/agent-hook-pack-header.svg" alt="agent-hook-pack" width="100%"></p>
 
 # Agent Hook Pack
-
-![Agent Hook Pack hero](docs/brand/agent-hook-pack-hero.png)
 
 > Install public-safe hooks that catch risky repo changes before commit.
 
@@ -15,6 +13,20 @@ generic so public repos can use it without importing private policy layers.
 AI-assisted work can produce lots of small file edits quickly. Hooks give the
 repo a cheap local checkpoint before sensitive files, wrong branches, or stale
 environment templates become a release problem.
+
+## How a hook answers
+
+A hook is handed the proposed call on standard input and answers with an exit
+code. It never rewrites the proposal, and the tool that called it is the thing
+that stops.
+
+![Eight stages from a proposed edit to an exit code: proposal, payload, scaffold, basename, components, exit code, reason, error. An agent asks to read or edit a file. The hook is handed the tool name and the file path as JSON on standard input, and a call with no file path is let through untouched. A write to a file whose name starts with .env is allowed, because scaffolding a template is not the same as reading an existing one. The file's base name is matched against sixteen names that are never opened. The path is then split into parts and checked against four credential directories, matched as whole components so a module named private_key is not caught by accident. Exit zero lets the call proceed and exit two stops it. A block prints the path and the reason on standard error, which is what the calling tool shows. A hook that raises exits one, so a broken check is visible instead of silently permissive. Three outcomes: allowed, blocked, and hook error.](docs/art/proposal-lane.svg)
+
+`verify-no-secrets.sh` runs at the other end of the turn. By then there is an
+index to read, so it works on what was actually staged rather than on what was
+proposed, and it blocks while the secret is still only staged.
+
+![Eight stages of the stop-time sweep: turn ends, repository, staged list, base names, key files, contents, report, block. The hook runs when the assistant finishes a turn, ahead of any commit. Outside a git working tree it exits immediately, and so does an empty index. The staged list comes from git diff cached, so only files already added are considered. Eight base names are refused outright, among them .env and credentials.json. Private key files are caught by name too, including any pem or key suffix. For each staged file still present on disk, the contents are read and matched against six credential shapes: a generic key or password assignment, an AWS access key, a GitHub token, a Slack token, a live Stripe key, and a PEM private key header. Every hit is named on standard error, path by path. Exit two stops the turn, so the secret is found while it is still only staged. Three outcomes: clean, blocked, and not a repository.](docs/art/staged-sweep-lane.svg)
 
 ## Try it
 
@@ -59,6 +71,8 @@ sync checks, and consistent hook deployment.
 
 `agent-hook-pack audit` checks the packaged hook inventory, empty files,
 shebang/runtime shape, and obvious credential-shaped strings.
+
+![The nine findings an audit can return, one to a row, each with what raises it and what the audit read to raise it. A missing source directory is reported alone, because nothing else can be inspected. A missing required hook is one of five fixed names. An empty file, a first line that is not a shebang, and a shebang naming the wrong interpreter are each their own finding. The last four are credential shapes found in the hook text itself: a GitHub token, an API key prefix, an AWS access key identifier, and a PEM private key header. The empty-file row is accented, because inspection of that file stops there and no further check runs against it.](docs/art/audit-findings.svg)
 
 Built with agentic tooling and manually reviewed before publish.
 
