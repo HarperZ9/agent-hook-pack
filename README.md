@@ -1,8 +1,20 @@
-<p align="center"><img src="docs/art/agent-hook-pack-header.svg" alt="agent-hook-pack" width="100%"></p>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/HarperZ9/agent-hook-pack/main/docs/art/hero-dark.svg">
+  <img src="https://raw.githubusercontent.com/HarperZ9/agent-hook-pack/main/docs/art/hero-light.svg" alt="agent-hook-pack: Hooks that block secrets, wrong branches and stale env templates. Lines arrive from one side at a toothed ring around a bright core; most pass through and a few stop at the ring with a short cross mark." width="100%">
+</picture>
 
-# Agent Hook Pack
+# agent-hook-pack
 
-> Install public-safe hooks that catch risky repo changes before commit.
+Hooks that block secrets, wrong branches and stale env templates.
+
+```
+python -m pip install -e .
+```
+
+[![version: 0.1.0](https://img.shields.io/badge/version-0.1.0-e6e1d6?style=flat-square&labelColor=1a1712)](https://github.com/HarperZ9/agent-hook-pack/releases/latest)
+[![CI](https://github.com/HarperZ9/agent-hook-pack/actions/workflows/ci.yml/badge.svg)](https://github.com/HarperZ9/agent-hook-pack/actions/workflows/ci.yml)
+[![license](https://img.shields.io/badge/license-MIT-e6e1d6?style=flat-square&labelColor=1a1712)](https://github.com/HarperZ9/agent-hook-pack/blob/main/LICENSE)
+![python 3.10+](https://img.shields.io/badge/python-3.10%2B-e6e1d6?style=flat-square&labelColor=1a1712)
 
 Agent Hook Pack packages small git and agent hooks for secret checks, branch
 guards, environment-template sync, and hook inventory audits. It is intentionally
